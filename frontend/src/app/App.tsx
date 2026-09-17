@@ -1,5 +1,18 @@
-function App() {
-  return <h1 className="text-blue-400 text-2xl">Hello World!</h1>
-}
+import { Link, NavLink, Outlet } from 'react-router'
 
-export default App
+export const App = () => {
+  return (
+    <div>
+      <header>
+        <Link to="/">Inventory</Link>
+        <nav aria-label="Main navigation">
+          <NavLink to="/products">Products</NavLink>
+          <NavLink to="/products/new">Add product</NavLink>
+        </nav>
+      </header>
+      <main>
+        <Outlet />
+      </main>
+    </div>
+  )
+}
