@@ -1,29 +1,16 @@
-import { Link } from 'react-router'
-import { useQuery } from '@tanstack/react-query'
-import { productsQuery } from '../lib/api/products.queries'
+import { ProductsList } from '../components/ProductsList'
 
 export const ProductsPage = () => {
-	const { data: products, isPending, isError } = useQuery(productsQuery())
-
-	if (isPending) return <p>Loading products...</p>
-	if (isError) return <p role="alert">Unable to load products.</p>
-
 	return (
-		<section>
-			<div>
-				<h1>Products</h1>
-				<Link to="/products/new">Add product</Link>
+		<section className="mx-auto mt-8 w-[calc(100%-2rem)] max-w-250 pb-10 sm:mt-14">
+			<div className="mb-8">
+				<div>
+					<p className="mb-2.5 text-xs font-bold uppercase tracking-[0.12em] text-[#4c766a]">Inventory</p>
+					<h1 className="m-0 font-serif text-4xl font-medium tracking-[-0.03em] text-[#24302d] sm:text-5xl">Products</h1>
+					<p className="mt-2.5 text-[#60706a]">Keep an eye on what is in stock and ready to move.</p>
+				</div>
 			</div>
-			{products.length === 0 ? <p>No products yet.</p> : (
-				<ul>
-					{products.map((product) => (
-						<li key={product.id}>
-							<Link to={`/products/${product.id}`}>{product.name}</Link>
-							<span> {product.quantity} in stock</span>
-						</li>
-					))}
-				</ul>
-			)}
+			<ProductsList />
 		</section>
 	)
 }
