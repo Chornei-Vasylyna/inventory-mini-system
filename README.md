@@ -110,17 +110,17 @@ From the project root, run:
 
  ## AI Usage Report
 
-- AI tool used:
-GitHub Copilot
+AI tool used:
+- GitHub Copilot
 
-- What I used AI for:
-I used AI mainly to skip tedious, repetitive tasks that I have done many times before. For example, since I have set up routing dozens of times, instead of manually writing the same basic boilerplate structure from scratch, I had Copilot generate it, and then I just tweaked it to fit my project needs. It helped me quickly scaffold standard CRUD endpoints, write initial routing setups, create basic UI styles, and generate TypeScript types.
+What I used AI for:
+- I used AI mainly to skip tedious, repetitive tasks that I have done many times before. For example, since I have set up routing dozens of times, instead of manually writing the same basic boilerplate structure from scratch, I had Copilot generate it, and then I just tweaked it to fit my project needs. It helped me quickly scaffold standard CRUD endpoints, write initial routing setups, create basic UI styles, and generate TypeScript types.
 
 I also used it to keep my code style consistent and clean:
 - Converting syntax to my preferred style, such as changing regular function declarations to arrow functions and switching to named exports instead of default ones.
 - Splitting already-written UI code and larger views into smaller, dedicated components to keep the file structure modular and readable.
 
-- 2–3 example prompts:
+2–3 example prompts:
 - "Сreate a form which creates a product. The user must fill out the name, quantity and price. And description as optional field.
 1. Create zod validation for these fields.
 2. Wire the zod with the form from react hook form.
@@ -134,8 +134,8 @@ I also used it to keep my code style consistent and clean:
     DELETE /products/:id
     GET /products/:id"
 
-- What I changed manually:
-I set up the overall project architecture, folder structure, and environment configurations myself. While Copilot generated the boilerplate for files and endpoints, I reviewed the code, fixed broken parts, resolved type mismatches, and connected all the frontend and backend parts together so the whole application runs properly.
+What I changed manually:
+- I set up the overall project architecture, folder structure, and environment configurations myself. While Copilot generated the boilerplate for files and endpoints, I reviewed the code, fixed broken parts, resolved type mismatches, and connected all the frontend and backend parts together so the whole application runs properly.
 
-- What was difficult:
-The difficult part was setting up Docker. I ran into several issues with Prisma inside the container: generating the Prisma client properly, handling the generated folder, and making sure the Docker services started in the right order so migrations wouldn't fail and the database tables were actually created before the app started.
+What was difficult:
+- The difficult part was setting up Docker. I ran into several issues with Prisma inside the container: generating the Prisma client properly, handling the generated folder, and making sure the Docker services started in the right order so migrations wouldn't fail and the database tables were actually created before the app started.
