@@ -51,8 +51,8 @@ export const ProductForm = () => {
 		})
 	}
 
-	if (isEditMode && (isProductPending || !product)) return <p className="rounded-xl border border-[#d8e1da] bg-white/90 p-8 text-[#60706a] shadow-[0_18px_45px_rgba(39,61,51,0.08)]">Loading product...</p>
 	if (isEditMode && isProductError) return <p className="rounded-xl border border-[#f0d1ce] bg-[#fff0ef] p-4 text-[#a33f3f]" role="alert">Unable to load product.</p>
+	if (isEditMode && (isProductPending || !product)) return <p className="rounded-xl border border-[#d8e1da] bg-white/90 p-8 text-[#60706a] shadow-[0_18px_45px_rgba(39,61,51,0.08)]">Loading product...</p>
 
 	const isPending = isSubmitting || createProduct.isPending || updateProduct.isPending
 
