@@ -37,9 +37,16 @@ export const ProductForm = () => {
 	})
 
 	const onSubmit = (values: ProductFormValues) => {
-		const input = { ...values, description: values.description || undefined }
-		const mutation = isEditMode ? updateProduct : createProduct
-		mutation.mutate(input, {
+		const description = values.description?.trim() || ''
+
+		if (isEditMode) {
+			updateProduct.mutate({ ...values, description: description || null }, {
+				onSuccess: () => navigate('/products'),
+			})
+			return
+		}
+
+		createProduct.mutate({ ...values, description: description || undefined }, {
 			onSuccess: () => navigate('/products'),
 		})
 	}

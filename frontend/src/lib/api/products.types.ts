@@ -18,4 +18,6 @@ export type CreateProductInput = {
 	description?: string
 }
 
-export type UpdateProductInput = Partial<CreateProductInput>
+export type UpdateProductInput = Partial<Omit<CreateProductInput, 'description'>> & {
+	description?: string | null
+}
