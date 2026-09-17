@@ -1,6 +1,5 @@
 import { Type } from 'class-transformer';
 import {
-  IsEnum,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -8,7 +7,6 @@ import {
   IsString,
   Min,
 } from 'class-validator';
-import { ProductStatus } from '../../../generated/prisma/enums.js';
 
 export class CreateProductDto {
   @IsNotEmpty()
@@ -24,9 +22,6 @@ export class CreateProductDto {
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   price!: number;
-
-  @IsEnum(ProductStatus)
-  status!: ProductStatus;
 
   @IsOptional()
   @IsString()
