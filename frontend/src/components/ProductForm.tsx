@@ -1,7 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router'
-import { useCreateProduct } from '../lib/api/products.mutations'
+import { Link, useNavigate, useParams } from 'react-router'
+import { useCreateProduct, useUpdateProduct } from '../lib/api/products.mutations'
+import { productQuery } from '../lib/api/products.queries'
 import { productSchema, type ProductFormValues } from '../lib/validation/productSchema'
 import { ProductFormField } from './ProductFormField'
 
@@ -9,21 +11,43 @@ const inputClassName = 'w-full rounded-md border border-[#cbd8cf] bg-[#fbfdfb] p
 
 export const ProductForm = () => {
 	const navigate = useNavigate()
+	const { productId } = useParams()
+
+	const parsedProductId = Number(productId)
+	const isEditMode = Number.isInteger(parsedProductId)
+	
 	const createProduct = useCreateProduct()
+	const updateProduct = useUpdateProduct(parsedProductId)
+	const { data: product, isPending: isProductPending, isError: isProductError } = useQuery({
+		...productQuery(parsedProductId),
+		enabled: isEditMode,
+	})
 	const {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting },
 	} = useForm<ProductFormValues>({
 		resolver: zodResolver(productSchema),
-		defaultValues: { name: '', description: '' },
+		values: product ? {
+			name: product.name,
+			quantity: product.quantity,
+			price: Number(product.price),
+			description: product.description ?? '',
+		} : { name: '', quantity: 0, price: 0, description: '' },
 	})
 
 	const onSubmit = (values: ProductFormValues) => {
-		createProduct.mutate({ ...values, description: values.description || undefined }, {
+		const input = { ...values, description: values.description || undefined }
+		const mutation = isEditMode ? updateProduct : createProduct
+		mutation.mutate(input, {
 			onSuccess: () => navigate('/products'),
 		})
 	}
+
+	if (isEditMode && (isProductPending || !product)) return <p className="rounded-xl border border-[#d8e1da] bg-white/90 p-8 text-[#60706a] shadow-[0_18px_45px_rgba(39,61,51,0.08)]">Loading product...</p>
+	if (isEditMode && isProductError) return <p className="rounded-xl border border-[#f0d1ce] bg-[#fff0ef] p-4 text-[#a33f3f]" role="alert">Unable to load product.</p>
+
+	const isPending = isSubmitting || createProduct.isPending || updateProduct.isPending
 
 	return (
 		<form className="grid gap-5 rounded-xl border border-[#d8e1da] bg-white/90 p-6 shadow-[0_18px_45px_rgba(39,61,51,0.1)] sm:grid-cols-2 sm:p-10" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -39,10 +63,10 @@ export const ProductForm = () => {
 				<ProductFormField colSpan label="Description (optional)" name="description" error={errors.description?.message}>
 					<textarea className={`${inputClassName} min-h-27.5 resize-y`} id="description" placeholder="Add useful details for your team" {...register('description')} />
 				</ProductFormField>
-				{createProduct.isError && <p className="m-0 rounded-md bg-[#fff0ef] px-3 py-2.5 text-xs text-[#a33f3f] sm:col-span-2" role="alert">Unable to create product.</p>}
+				{(createProduct.isError || updateProduct.isError) && <p className="m-0 rounded-md bg-[#fff0ef] px-3 py-2.5 text-xs text-[#a33f3f] sm:col-span-2" role="alert">Unable to {isEditMode ? 'update' : 'create'} product.</p>}
 				<div className="flex items-center gap-4.5 pt-1 sm:col-span-2">
-					<button className="rounded-md border-0 bg-[#315f54] px-4.5 py-3 font-bold text-white transition hover:bg-[#264c43] hover:-translate-y-px disabled:cursor-wait disabled:opacity-65" type="submit" disabled={isSubmitting || createProduct.isPending}>
-						{isSubmitting || createProduct.isPending ? 'Creating...' : 'Create product'}
+					<button className="cursor-pointer rounded-md border-0 bg-[#315f54] px-4.5 py-3 font-bold text-white transition hover:bg-[#264c43] hover:-translate-y-px disabled:cursor-wait disabled:opacity-65" type="submit" disabled={isPending}>
+						{isPending ? (isEditMode ? 'Saving...' : 'Creating...') : (isEditMode ? 'Save changes' : 'Create product')}
 					</button>
 					<Link className="font-bold text-[#4c766a] no-underline hover:underline" to="/products">Cancel</Link>
 				</div>

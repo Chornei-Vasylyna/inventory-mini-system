@@ -22,6 +22,10 @@ export const router = createBrowserRouter([
         Component: ProductFormPage,
       },
       {
+        path: 'products/:productId/edit',
+        Component: ProductFormPage,
+      },
+      {
         path: 'products/:productId',
         Component: ProductDetailsPage,
       },

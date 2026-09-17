@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service.js';
+import type { ProductStatus } from '../generated/prisma/enums.js';
 import type { CreateProductDto } from './dtos/create-product.dto.js';
 import type { UpdateProductDto } from './dtos/update-product.dto.js';
 
@@ -34,10 +35,13 @@ export class ProductsService {
 
 	async update(id: number, input: UpdateProductDto) {
 		await this.findOne(id);
+		const data = input.quantity === undefined
+			? input
+			: { ...input, status: this.calculateStatus(input.quantity) };
 
 		return this.prisma.product.update({
 			where: { id },
-			data: input,
+			data,
 		});
 	}
 
@@ -47,7 +51,7 @@ export class ProductsService {
 		return this.prisma.product.delete({ where: { id } });
 	}
 
-	private calculateStatus(quantity: number) {
+	private calculateStatus(quantity: number): ProductStatus {
 		if (quantity <= 0) return "out_of_stock";
 		if (quantity <= 5) return "low_stock";
 		return "in_stock"
