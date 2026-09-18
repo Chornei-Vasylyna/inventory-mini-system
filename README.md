@@ -127,12 +127,12 @@ I also used it to keep my code style consistent and clean:
 3. Сreate the form itself.
 4. The design can be simple. Focus on logic more."
 - "Replace function declaration with arrow functions, and make the named exports not default"
-- "Create these endpoints
-    GET /products
-    POST /products
-    PATCH /products/:id
-    DELETE /products/:id
-    GET /products/:id"
+- "Create these endpoints  
+GET /products  
+POST /products  
+PATCH /products/:id  
+DELETE /products/:id  
+GET /products/:id"
 
 What I changed manually:
 - I set up the overall project architecture, folder structure, and environment configurations myself. While Copilot generated the boilerplate for files and endpoints, I reviewed the code, fixed broken parts, resolved type mismatches, and connected all the frontend and backend parts together so the whole application runs properly.
